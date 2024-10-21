@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //GET route for the homepage
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  res.send('Welcome to My Movie API!');
 });
 
 // GET route for the "/movies" endpoint
