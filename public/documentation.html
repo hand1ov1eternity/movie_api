@@ -6,5 +6,65 @@
 <body>
     <h1>API Documentation</h1>
     <p>This is the documentation for the Movie API.</p>
+
+    <h2>API Endpoints</h2>
+
+    <table border="1">
+       <thead>
+           <tr>
+              <th>Request</th>
+              <th>URL</th>
+              <th>Responses</th>
+           </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>/movies</td>
+                <td>Returns a list of all movies</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/movies/:title</td>
+                <td>Returns general data </td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/genres/:name</td>
+                <td>Returns data about a genre </td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/directors/:name</td>
+                <td>Returns data about director </td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/users/register</td>
+                <td>Allows new users to register </td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>/users/:email</td>
+                <td>Allows users to update their username </td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/users/favorites/:movieTitle</td>
+                <td>Allows users to add a movie to their list of favorites </td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>/users/favorites/:movieTitle</td>
+                <td>Allows users to remove a movie from their list of favorites </td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>/users/deregister/:email</td>
+                <td>Allows existing users to deregister </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
