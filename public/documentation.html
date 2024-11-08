@@ -1,68 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie API Documentation</title>
 </head>
 <body>
     <h1>API Documentation</h1>
-    <p>This is the documentation for the Movie API.</p>
+    <p>This is the documentation for the Movie API, which allows users to access information about movies, genres, directors, and user-related operations.</p>
 
-    <h2>API Endpoints</h2>
+    <h2>Endpoints</h2>
 
     <table border="1">
        <thead>
            <tr>
-              <th>Request</th>
-              <th>URL</th>
-              <th>Responses</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+            <th>URL</th>
+            <th>Method</th>
+            <th>Query Parameters</th>
+            <th>Request Body Format</th>
+            <th>Response Format</th>
            </tr>
         </thead>
 
         <tbody>
+            <!-- Get all movies -->
             <tr>
-                <td>GET</td>
                 <td>/movies</td>
-                <td>Returns a list of all movies</td>
-            </tr>
-            <tr>
+                <td>Returns a list of all movies in the API.</td>
+                <td>/movies</td>
                 <td>GET</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "topMovies": [
+        { "title": "Movie Title", "year": 2021 },
+        { "title": "Another Movie", "year": 2022 }
+    ]
+}
+                    </pre>
+                </td>
+            </tr>
+            
+            <!-- Get movie by title -->
+            <tr>
                 <td>/movies/:title</td>
-                <td>Returns general data </td>
-            </tr>
-            <tr>
+                <td>Returns detailed information about a single movie by its title.</td>
+                <td>/movies/:title</td>
                 <td>GET</td>
+                <td>title (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "title": "Movie Title",
+    "description": "This is a movie description.",
+    "genre": "Action",
+    "director": "Director Name",
+    "imageUrl": "https://path/to/image.jpg",
+    "featured": true
+}
+                    </pre>
+                </td>
+            </tr>
+            
+            <!-- Get genre data by name -->
+            <tr>
                 <td>/genres/:name</td>
-                <td>Returns data about a genre </td>
-            </tr>
-            <tr>
+                <td>Returns information about a movie genre (e.g., Thriller, Action).</td>
+                <td>/genres/:name</td>
                 <td>GET</td>
+                <td>name (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "name": "Thriller",
+    "description": "A genre that involves suspense, excitement, and tension."
+}
+                    </pre>
+                </td>
+            </tr>
+            
+            <!-- Get director data by name -->
+            <tr>
                 <td>/directors/:name</td>
-                <td>Returns data about director </td>
+                <td>Returns biographical information about a director.</td>
+                <td>/directors/:name</td>
+                <td>GET</td>
+                <td>name (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "name": "Director Name",
+    "bio": "A brief biography of the director.",
+    "birthYear": 1900,
+    "deathYear": 2050
+}
+                    </pre>
+                </td>
             </tr>
+            
+            <!-- User Registration -->
             <tr>
-                <td>POST</td>
                 <td>/users/register</td>
-                <td>Allows new users to register </td>
-            </tr>
-            <tr>
-                <td>PUT</td>
-                <td>/users/:email</td>
-                <td>Allows users to update their username </td>
-            </tr>
-            <tr>
+                <td>Registers a new user in the system.</td>
+                <td>/users/register</td>
                 <td>POST</td>
-                <td>/users/favorites/:movieTitle</td>
-                <td>Allows users to add a movie to their list of favorites </td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "username": "miles_dyson",
+    "email": "miles@example.com"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "message": "User registration successful"
+}
+                    </pre>
+                </td>
             </tr>
+            
+            <!-- Update user info -->
             <tr>
-                <td>DELETE</td>
-                <td>/users/favorites/:movieTitle</td>
-                <td>Allows users to remove a movie from their list of favorites </td>
+                <td>/users/:email</td>
+                <td>Updates the user's username based on their email.</td>
+                <td>/users/:email</td>
+                <td>PUT</td>
+                <td>email (in URL path)</td>
+                <td>
+                    <pre>
+{
+    "username": "new_username"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "message": "User info updated successfully"
+}
+                    </pre>
+                </td>
             </tr>
+            
+            <!-- Add movie to favorites -->
             <tr>
+                <td>/users/favorites/:movieTitle</td>
+                <td>Adds a movie to the user's favorites list.</td>
+                <td>/users/favorites/:movieTitle</td>
+                <td>POST</td>
+                <td>movieTitle (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "message": "Movie added to favorites"
+}
+                    </pre>
+                </td>
+            </tr>
+            
+            <!-- Remove movie from favorites -->
+            <tr>
+                <td>/users/favorites/:movieTitle</td>
+                <td>Removes a movie from the user's favorites list.</td>
+                <td>/users/favorites/:movieTitle</td>
                 <td>DELETE</td>
+                <td>movieTitle (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "message": "Movie removed from favorites"
+}
+                    </pre>
+                </td>
+            </tr>
+            
+            <!-- Deregister user -->
+            <tr>
                 <td>/users/deregister/:email</td>
-                <td>Allows existing users to deregister </td>
+                <td>Deletes the user from the system.</td>
+                <td>/users/deregister/:email</td>
+                <td>DELETE</td>
+                <td>email (in URL path)</td>
+                <td>N/A</td>
+                <td>
+                    <pre>
+{
+    "message": "User deregistered successfully"
+}
+                    </pre>
+                </td>
             </tr>
         </tbody>
     </table>
