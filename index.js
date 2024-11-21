@@ -1,83 +1,149 @@
 const express = require('express');
-const morgan = require ('morgan');
-const path = require ('path');
+const morgan = require('morgan');
+const path = require('path');
+const bodyParser = require('express').json; // Middleware to parse JSON requests
 const app = express();
 const mongoose = require('mongoose');
-const Models = require('./models.js')
+const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/cfDB', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
-//Middleware to log all requests
+// Middleware to log all requests and parse JSON
 app.use(morgan('common'));
+app.use(bodyParser());
 
-//Serve static files from the public folder
+// Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-//GET route for the homepage
+// GET route for the homepage
 app.get('/', (req, res) => {
   res.send('Welcome to My Movie API!');
 });
 
-// Route to return a list of all the movies
-app.get('/movies', (req, res) => {
-  res.send('GET request returning data on all movies');
+// GET all movies
+app.get('/movies', async (req, res) => {
+  try {
+    const movies = await Movies.find();
+    res.status(200).json(movies);
+  } catch (err) {
+    res.status(500).json({ error: 'Unable to fetch movies' });
+  }
 });
 
-// Route to return data on a single movie by title
-app.get('/movies/:title', (req, res) => {
-  res.send(`GET request returning data for the movie with title: ${req.params.title}`);
+// GET a single movie by title
+app.get('/movies/:title', async (req, res) => {
+  try {
+    const movie = await Movies.findOne({ title: req.params.title });
+    if (!movie) return res.status(404).json({ error: 'Movie not found' });
+    res.status(200).json(movie);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching movie' });
+  }
 });
 
-// Route to return data about a genre by name
-app.get('/genres/:name', (req, res) => {
-  res.send(`GET request returning data for the genre: ${req.params.name}`);
+// GET a genre by name
+app.get('/genres/:name', async (req, res) => {
+  try {
+    const movie = await Movies.findOne({ 'genre.name': req.params.name });
+    if (!movie) return res.status(404).json({ error: 'Genre not found' });
+    res.status(200).json(movie.genre);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching genre' });
+  }
 });
 
-// Route to return data about a director by name
-app.get('/directors/:name', (req, res) => {
-  res.send(`GET request returning data for the director: ${req.params.name}`);
+// GET a director by name
+app.get('/directors/:name', async (req, res) => {
+  try {
+    const movie = await Movies.findOne({ 'director.name': req.params.name });
+    if (!movie) return res.status(404).json({ error: 'Director not found' });
+    res.status(200).json(movie.director);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching director' });
+  }
 });
 
-// Route for user registration
-app.post('/users/register', (req, res) => {
-  res.send('POST request to register a new user');
+// POST user registration
+app.post('/users/register', async (req, res) => {
+  try {
+    const newUser = await Users.create(req.body);
+    res.status(201).json({ message: 'User registered successfully', user: newUser });
+  } catch (err) {
+    res.status(400).json({ error: 'Unable to register user', details: err.message });
+  }
 });
 
-// Route to update user info (username)
-app.put('/users/:email', (req, res) => {
-  res.send(`PUT request to update user info for email: ${req.params.email}`);
+// PUT update user info
+app.put('/users/:email', async (req, res) => {
+  try {
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: req.params.email },
+      { username: req.body.username },
+      { new: true }
+    );
+    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
+    res.status(200).json({ message: 'User info updated successfully', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating user info' });
+  }
 });
 
-// Route to add a movie to user favorites
-app.post('/users/favorites/:movieTitle', (req, res) => {
-  res.send(`POST request to add movie "${req.params.movieTitle}" to user favorites`);
+// POST add movie to favorites
+app.post('/users/favorites/:movieTitle', async (req, res) => {
+  try {
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: req.body.email },
+      { $addToSet: { favorites: req.params.movieTitle } },
+      { new: true }
+    );
+    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
+    res.status(200).json({ message: 'Movie added to favorites', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Error adding movie to favorites' });
+  }
 });
 
-// Route to remove a movie from user favorites
-app.delete('/users/favorites/:movieTitle', (req, res) => {
-  res.send(`DELETE request to remove movie "${req.params.movieTitle}" from user favorites`);
+// DELETE remove movie from favorites
+app.delete('/users/favorites/:movieTitle', async (req, res) => {
+  try {
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: req.body.email },
+      { $pull: { favorites: req.params.movieTitle } },
+      { new: true }
+    );
+    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
+    res.status(200).json({ message: 'Movie removed from favorites', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Error removing movie from favorites' });
+  }
 });
 
-// Route to deregister a user
-app.delete('/users/deregister/:email', (req, res) => {
-  res.send(`DELETE request to deregister user with email: ${req.params.email}`);
+// DELETE deregister a user
+app.delete('/users/deregister/:email', async (req, res) => {
+  try {
+    const deletedUser = await Users.findOneAndDelete({ email: req.params.email });
+    if (!deletedUser) return res.status(404).json({ error: 'User not found' });
+    res.status(200).json({ message: 'User deregistered successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error deregistering user' });
+  }
 });
 
-//Error handling middleware for logging errors
+// Error handling middleware for logging errors
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
 });
 
-//Start the server
+// Start the server
 const port = 3000;
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
 
