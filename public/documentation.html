@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>API Documentation</h1>
-    <p>This is the documentation for the Movie API, which allows users to access information about movies, genres, directors, and user-related operations.</p>
+    <p>This is the documentation for the Movie API, which allows users to access information about movies, genres, directors, and perform user-related operations.</p>
 
     <h2>Endpoints</h2>
 
@@ -18,12 +18,11 @@
             <th>Description</th>
             <th>URL</th>
             <th>Method</th>
-            <th>Query Parameters</th>
-            <th>Request Body Format</th>
+            <th>Query Parameters / URL Params</th>
+            <th>Request Body Format (if any)</th>
             <th>Response Format</th>
            </tr>
         </thead>
-
         <tbody>
             <!-- Get all movies -->
             <tr>
@@ -35,12 +34,18 @@
                 <td>N/A</td>
                 <td>
                     <pre>
-{
-    "topMovies": [
-        { "title": "Movie Title", "year": 2021 },
-        { "title": "Another Movie", "year": 2022 }
-    ]
-}
+[
+    {
+        "_id": "movieId1",
+        "title": "Movie Title",
+        "description": "A short description.",
+        "genre": { "name": "Action", "description": "Fast-paced movies with physical stunts" },
+        "director": { "name": "Director Name", "bio": "Short bio.", "birthYear": 1965 },
+        "imageUrl": "https://path/to/image.jpg",
+        "featured": false
+    },
+    ...
+]
                     </pre>
                 </td>
             </tr>
@@ -56,12 +61,13 @@
                 <td>
                     <pre>
 {
+    "_id": "movieId1",
     "title": "Movie Title",
-    "description": "This is a movie description.",
-    "genre": "Action",
-    "director": "Director Name",
+    "description": "A short description.",
+    "genre": { "name": "Action", "description": "Fast-paced movies with physical stunts" },
+    "director": { "name": "Director Name", "bio": "Short bio.", "birthYear": 1965 },
     "imageUrl": "https://path/to/image.jpg",
-    "featured": true
+    "featured": false
 }
                     </pre>
                 </td>
@@ -98,8 +104,8 @@
 {
     "name": "Director Name",
     "bio": "A brief biography of the director.",
-    "birthYear": 1900,
-    "deathYear": 2050
+    "birthYear": 1965,
+    "deathYear": null
 }
                     </pre>
                 </td>
@@ -115,15 +121,23 @@
                 <td>
                     <pre>
 {
-    "username": "miles_dyson",
-    "email": "miles@example.com"
+    "username": "new_user",
+    "email": "new_user@example.com",
+    "birthday": "1990-05-20"
 }
                     </pre>
                 </td>
                 <td>
                     <pre>
 {
-    "message": "User registration successful"
+    "message": "User registration successful",
+    "user": {
+        "_id": "userId1",
+        "username": "new_user",
+        "email": "new_user@example.com",
+        "birthday": "1990-05-20T00:00:00.000Z",
+        "favorites": []
+    }
 }
                     </pre>
                 </td>
@@ -139,14 +153,20 @@
                 <td>
                     <pre>
 {
-    "username": "new_username"
+    "username": "updated_username"
 }
                     </pre>
                 </td>
                 <td>
                     <pre>
 {
-    "message": "User info updated successfully"
+    "message": "User info updated successfully",
+    "user": {
+        "_id": "userId1",
+        "username": "updated_username",
+        "email": "user@example.com",
+        "favorites": []
+    }
 }
                     </pre>
                 </td>
@@ -159,11 +179,22 @@
                 <td>/users/favorites/:movieTitle</td>
                 <td>POST</td>
                 <td>movieTitle (in URL path)</td>
-                <td>N/A</td>
                 <td>
                     <pre>
 {
-    "message": "Movie added to favorites"
+    "email": "user@example.com"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "message": "Movie added to favorites",
+    "user": {
+        "_id": "userId1",
+        "email": "user@example.com",
+        "favorites": ["Movie Title"]
+    }
 }
                     </pre>
                 </td>
@@ -176,11 +207,22 @@
                 <td>/users/favorites/:movieTitle</td>
                 <td>DELETE</td>
                 <td>movieTitle (in URL path)</td>
-                <td>N/A</td>
                 <td>
                     <pre>
 {
-    "message": "Movie removed from favorites"
+    "email": "user@example.com"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "message": "Movie removed from favorites",
+    "user": {
+        "_id": "userId1",
+        "email": "user@example.com",
+        "favorites": []
+    }
 }
                     </pre>
                 </td>
