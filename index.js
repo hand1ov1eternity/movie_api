@@ -70,13 +70,28 @@ app.get('/directors/:name', async (req, res) => {
 });
 
 // POST user registration
-app.post('/users/register', async (req, res) => {
-  try {
-    const newUser = await Users.create(req.body);
-    res.status(201).json({ message: 'User registered successfully', user: newUser });
-  } catch (err) {
-    res.status(400).json({ error: 'Unable to register user', details: err.message });
+app.post('/users/register', (req, res) => {
+  const { email, password, username } = req.body;
+  
+  // Check if all required fields are provided
+  if (!email || !password || !username) {
+    return res.status(400).json({ error: "Missing required fields" });
   }
+
+  const newUser = new Users({
+    email,
+    password,
+    username
+  });
+
+  newUser.save()
+    .then(user => {
+      res.status(201).json({ message: "User registration successful" });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: "Unable to register user", details: err.message });
+    });
 });
 
 // PUT update user info
