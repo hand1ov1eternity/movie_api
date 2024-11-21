@@ -69,24 +69,6 @@ app.delete('/users/deregister/:email', (req, res) => {
   res.send(`DELETE request to deregister user with email: ${req.params.email}`);
 });
 
-// GET route for the "/movies" endpoint
-app.get('/movies', (req, res) => {
-    res.json({
-      topMovies: [
-        { title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001 },
-        { title: 'The Lord of the Rings: The Two Towers', year: 2002 },
-        { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
-        { title: 'The Dark Knight', year: 2008 },
-        { title: 'The Matrix', year: 1999 },
-        { title: 'Fight Club', year: 1999 },
-        { title: 'Terminator', year: 1984 },
-        { title: 'Terminator 2: Judgment Day ', year: 1991 },
-        { title: 'Django Unchained', year: 2012 },
-        { title: 'All Quiet on the Western Front', year: 2022 }
-      ]
-    });
-  });
-
 //Error handling middleware for logging errors
 app.use((err, req, res, next) => {
     console.error(err.stack);
