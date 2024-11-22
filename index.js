@@ -18,6 +18,9 @@ mongoose.connect('mongodb://localhost:27017/cfDB', {
 app.use(morgan('common'));
 app.use(bodyParser());
 
+// Authentication Logic Import
+let auth = require('./auth')(app);
+
 // Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
