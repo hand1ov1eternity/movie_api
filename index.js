@@ -18,7 +18,7 @@ mongoose.connect('mongodb://localhost:27017/cfDB', {
 app.use(morgan('common'));
 app.use(bodyParser());
 
-// Authentication Logic Import
+// Require Authentication Logic 
 let auth = require('./auth')(app);
 
 // Require Passport module
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 });
 
 // GET all movies
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const movies = await Movies.find();
     res.status(200).json(movies);
