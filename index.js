@@ -21,6 +21,10 @@ app.use(bodyParser());
 // Authentication Logic Import
 let auth = require('./auth')(app);
 
+// Require Passport module
+const passport = require('passport');
+require('./passport');
+
 // Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
