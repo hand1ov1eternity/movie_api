@@ -118,7 +118,7 @@ app.get('/users', async (req, res) => {
     });
 });
 
-// Update a user's info, by username
+// Update a user's info,by username
 app.put('/users/:Username', async (req, res) => {
   await Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
