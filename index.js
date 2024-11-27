@@ -162,7 +162,7 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), as
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const user = await Users.findOneAndRemove({ Username: req.params.username });
+    const user = await Users.findOneAndRemove({ username: req.params.username });
     if (!user) {
       return res.status(404).send(req.params.username + ' was not found');
     }
