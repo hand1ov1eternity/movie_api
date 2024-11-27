@@ -18,12 +18,12 @@ mongoose.connect('mongodb://localhost:27017/cfDB', {
 app.use(morgan('common'));
 app.use(bodyParser());
 
-/*// Require Authentication Logic 
+// Require Authentication Logic 
 let auth = require('./auth')(app);
 
 // Require Passport module
 const passport = require('passport');
-require('./passport');*/
+require('./passport');
 
 // Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 });
 
 // Return all movies
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Movies.find()
     .then((movies) => res.status(200).json(movies))
     .catch((err) => res.status(500).send('Error: ' + err));
@@ -77,6 +77,20 @@ app.get('/directors/:name', async (req, res) => {
       }
     })
     .catch((err) => res.status(500).send('Error: ' + err));
+});
+
+app.get('/users/:username', async (req, res) => {
+  await Users.findOne({ username: req.params.username })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 // Register new user
