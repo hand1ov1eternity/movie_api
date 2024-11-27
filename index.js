@@ -161,18 +161,16 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), as
 
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  await Users.findOneAndRemove({ username: req.params.username })
-    .then((user) => {
-      if (!user) {
-        res.status(400).send(req.params.username + ' was not found');
-      } else {
-        res.status(200).send(req.params.username + ' was deleted.');
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
+  try {
+    const user = await Users.findOneAndRemove({ Username: req.params.username });
+    if (!user) {
+      return res.status(404).send(req.params.username + ' was not found');
+    }
+    res.status(200).send(req.params.username + ' was deleted.');
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    res.status(500).send('Error: ' + err);
+  }
 });
 
 // Add a movie to a user`s favorites
