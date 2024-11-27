@@ -79,6 +79,8 @@ app.get('/directors/:name', async (req, res) => {
     .catch((err) => res.status(500).send('Error: ' + err));
 });
 
+
+// Return data about a user
 app.get('/users/:username', async (req, res) => {
   await Users.findOne({ username: req.params.username })
     .then((user) => {
