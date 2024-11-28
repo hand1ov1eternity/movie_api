@@ -8,6 +8,7 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 
 // Run CORS
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
@@ -111,7 +112,19 @@ app.get('/users/:username', passport.authenticate('jwt', { session: false }), as
 });
 
 // Register new user
-app.post('/users', async (req, res) => {
+app.post('/users', [
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], async (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  
   let hashedPassword = Users.hashPassword(req.body.password);
   await Users.findOne({ username: req.body.username })
     .then((user) => {
@@ -152,7 +165,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), async (req, 
 
 // Update a user's info,by username
 app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  // CONDITION TO CHECK 
+// CONDITION TO CHECK 
   if(req.user.username !== req.params.username){
     return res.status(400).send('Permission denied');
 }
