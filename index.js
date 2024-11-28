@@ -161,7 +161,7 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), as
 
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  await Users.findOneAndRemove({ username: req.params.username })
+  await Users.findOneAndDelete({ username: req.params.username })
     .then((user) => {
       if (!user) {
         res.status(400).send(req.params.username + ' was not found');
@@ -193,7 +193,7 @@ app.delete('/users/:username/movies/:MovieID', passport.authenticate('jwt', { se
     { $pull: { favoriteMovies: req.params.MovieID } },
     { new: true }
   )
-    .then((updatedUser) => res.json(updatedUser))
+    .then(() => res.json({ message: `Movie ${req.params.MovieID} was removed from ${req.params.username}'s favorites.` }))
     .catch((err) => res.status(500).send('Error: ' + err));
 });
 
