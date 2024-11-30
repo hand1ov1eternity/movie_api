@@ -167,29 +167,51 @@ app.get('/users', passport.authenticate('jwt', { session: false }), async (req, 
 });
 
 // Update a user's info,by username
-app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-// CONDITION TO CHECK 
-  if(req.user.username !== req.params.username){
-    return res.status(400).send('Permission denied');
-}
-  await Users.findOneAndUpdate({ username: req.params.username }, { $set:
-    {
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
-      birthday: req.body.birthday
+app.put(
+  '/users/:username',
+  [
+    passport.authenticate('jwt', { session: false }),
+    check('username', 'Username must be at least 5 characters long').optional().isLength({ min: 5 }),
+    check('username', 'Username contains non-alphanumeric characters - not allowed.').optional().isAlphanumeric(),
+    check('password', 'Password is required').optional().not().isEmpty(),
+    check('email', 'Email does not appear to be valid').optional().isEmail(),
+  ],
+  async (req, res) => {
+    // Validate request data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
-  },
-  { new: true }) // This line makes sure that the updated document is returned
-  .then((updatedUser) => {
-    res.json(updatedUser);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  })
 
-});
+    // Check permission
+    if (req.user.username !== req.params.username) {
+      return res.status(400).send('Permission denied');
+    }
+
+    // Hash the password if it's being updated
+    const updatedData = { ...req.body };
+    if (updatedData.password) {
+      updatedData.password = Users.hashPassword(updatedData.password);
+    }
+
+    // Update user in the database
+    await Users.findOneAndUpdate(
+      { username: req.params.username },
+      { $set: updatedData },
+      { new: true } // This ensures the updated document is returned
+    )
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          return res.status(404).send('User not found');
+        }
+        res.json(updatedUser);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
