@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/cfDB', {
+mongoose.connect('mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
