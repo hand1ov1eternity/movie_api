@@ -113,9 +113,9 @@
             
             <!-- User Registration -->
             <tr>
-                <td>/users/register</td>
+                <td>/users</td>
                 <td>Registers a new user in the system.</td>
-                <td>/users/register</td>
+                <td>/users</td>
                 <td>POST</td>
                 <td>N/A</td>
                 <td>
@@ -136,7 +136,7 @@
         "username": "new_user",
         "email": "new_user@example.com",
         "birthday": "1990-05-20T00:00:00.000Z",
-        "favorites": []
+        "favoriteMovies": []
     }
 }
                     </pre>
@@ -145,15 +145,17 @@
             
             <!-- Update user info -->
             <tr>
-                <td>/users/:email</td>
-                <td>Updates the user's username based on their email.</td>
-                <td>/users/:email</td>
+                <td>/users/:username</td>
+                <td>Updates the user's username, email, and password based on their username.</td>
+                <td>/users/:username</td>
                 <td>PUT</td>
-                <td>email (in URL path)</td>
+                <td>username (in URL path)</td>
                 <td>
                     <pre>
 {
-    "username": "updated_username"
+    "username": "updated_username",
+    "email": "updated_email@example.com",
+    "birthday": "1991-06-15"
 }
                     </pre>
                 </td>
@@ -164,8 +166,9 @@
     "user": {
         "_id": "userId1",
         "username": "updated_username",
-        "email": "user@example.com",
-        "favorites": []
+        "email": "updated_email@example.com",
+        "birthday": "1991-06-15T00:00:00.000Z",
+        "favoriteMovies": []
     }
 }
                     </pre>
@@ -174,15 +177,15 @@
             
             <!-- Add movie to favorites -->
             <tr>
-                <td>/users/favorites/:movieTitle</td>
+                <td>/users/:username/movies/:movieID</td>
                 <td>Adds a movie to the user's favorites list.</td>
-                <td>/users/favorites/:movieTitle</td>
+                <td>/users/:username/movies/:movieID</td>
                 <td>POST</td>
-                <td>movieTitle (in URL path)</td>
+                <td>movieID (in URL path)</td>
                 <td>
                     <pre>
 {
-    "email": "user@example.com"
+    "username": "user_name"
 }
                     </pre>
                 </td>
@@ -192,8 +195,8 @@
     "message": "Movie added to favorites",
     "user": {
         "_id": "userId1",
-        "email": "user@example.com",
-        "favorites": ["Movie Title"]
+        "username": "user_name",
+        "favoriteMovies": ["movieID"]
     }
 }
                     </pre>
@@ -202,44 +205,38 @@
             
             <!-- Remove movie from favorites -->
             <tr>
-                <td>/users/favorites/:movieTitle</td>
+                <td>/users/:username/movies/:movieID</td>
                 <td>Removes a movie from the user's favorites list.</td>
-                <td>/users/favorites/:movieTitle</td>
+                <td>/users/:username/movies/:movieID</td>
                 <td>DELETE</td>
-                <td>movieTitle (in URL path)</td>
-                <td>
-                    <pre>
-{
-    "email": "user@example.com"
-}
-                    </pre>
-                </td>
+                <td>movieID (in URL path)</td>
+                <td>N/A</td>
                 <td>
                     <pre>
 {
     "message": "Movie removed from favorites",
     "user": {
         "_id": "userId1",
-        "email": "user@example.com",
-        "favorites": []
+        "username": "user_name",
+        "favoriteMovies": []
     }
 }
                     </pre>
                 </td>
             </tr>
             
-            <!-- Deregister user -->
+            <!-- Delete user -->
             <tr>
-                <td>/users/deregister/:email</td>
+                <td>/users/:username</td>
                 <td>Deletes the user from the system.</td>
-                <td>/users/deregister/:email</td>
+                <td>/users/:username</td>
                 <td>DELETE</td>
-                <td>email (in URL path)</td>
+                <td>username (in URL path)</td>
                 <td>N/A</td>
                 <td>
                     <pre>
 {
-    "message": "User deregistered successfully"
+    "message": "User successfully deleted"
 }
                     </pre>
                 </td>
