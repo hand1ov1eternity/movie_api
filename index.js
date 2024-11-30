@@ -31,7 +31,7 @@ mongoose.connect('mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mong
 });*/
 
 // Connect to MongoDB
-mongoose.connect( 'https://movie-api-bqfe.onrender.com', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( 'mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Middleware to log all requests and parse JSON
 app.use(morgan('common'));
