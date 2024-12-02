@@ -44,18 +44,31 @@ Endpoints
 Here is a brief overview of the available API endpoints:
 
 Movies Endpoints
-GET /movies - Get a list of all movies
-GET /movies/:title - Get detailed information about a movie by title
+
+* GET /movies - Get a list of all movies
+
+* GET /movies/:title - Get detailed information about a movie by title
+
 Genres Endpoints
-GET /genres/:name - Get information about a genre by name
+
+* GET /genres/:name - Get information about a genre by name
+
 Directors Endpoints
-GET /directors/:name - Get information about a director by name
+
+*GET /directors/:name - Get information about a director by name
+
 Users Endpoints
-POST /users - Register a new user
-PUT /users/:username - Update user details (username, email, etc.)
-POST /users/:username/movies/:movieID - Add a movie to the user's favorites
-DELETE /users/:username/movies/:movieID - Remove a movie from the user's favorites
-DELETE /users/:username - Delete the user from the system
+
+* POST /users - Register a new user
+
+* PUT /users/:username - Update user details (username, email, etc.)
+
+* POST /users/:username/movies/:movieID - Add a movie to the user's favorites
+
+* DELETE /users/:username/movies/:movieID - Remove a movie from the user's favorites
+
+* DELETE /users/:username - Delete the user from the system
+
 For more details on the API, check out the API Documentation.
 
 
