@@ -41,6 +41,7 @@ The server will start and you can make requests to the API using Postman or any 
 http://localhost:3000
 ```
 Endpoints
+
 Here is a brief overview of the available API endpoints:
 
 Movies Endpoints
