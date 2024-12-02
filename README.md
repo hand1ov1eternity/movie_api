@@ -40,7 +40,7 @@ The server will start and you can make requests to the API using Postman or any 
 ```bash
 http://localhost:3000
 ```
-Endpoints
+**Endpoints**
 
 Here is a brief overview of the available API endpoints:
 
