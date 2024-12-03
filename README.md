@@ -16,7 +16,7 @@ To get started with the Movie API, clone this repository to your local machine a
 Step 1: Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/movie-api.git
+git clone https://github.com/hand1ov1eternity/movie_api.git
 ```
 Step 2: Navigate to the project directory
 
