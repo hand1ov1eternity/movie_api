@@ -24,14 +24,14 @@ app.use(cors({
   }
 }));
 
-/*// Connect to MongoDB
-mongoose.connect('https://movie-api-bqfe.onrender.com', {
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:3000/movies', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});*/
+});
 
-// Connect to MongoDB
-mongoose.connect( 'https://movie-api-bqfe.onrender.com', { useNewUrlParser: true, useUnifiedTopology: true });
+/*// Connect to MongoDB
+mongoose.connect( 'https://movie-api-bqfe.onrender.com', { useNewUrlParser: true, useUnifiedTopology: true });*/
 
 // Middleware to log all requests and parse JSON
 app.use(morgan('common'));
