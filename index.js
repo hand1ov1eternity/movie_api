@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 });
 
 // Return all movies
-app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get('/movies', async (req, res) => {
   await Movies.find()
     .then((movies) => res.status(200).json(movies))
     .catch((err) => res.status(500).send('Error: ' + err));
