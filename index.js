@@ -51,8 +51,10 @@ app.get('/movies', async (req, res) => {
   try {
     const movies = await Movies.find(); // Fetch all movies from MongoDB
     if (!movies.length) {
+      console.log("No movies found"); // Log if no movies are found
       return res.status(404).send('No movies found');
     }
+    console.log("Movies found:", movies); // Log the fetched movies
     res.status(200).json(movies);
   } catch (err) {
     console.error(err);
