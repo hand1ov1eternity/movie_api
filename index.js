@@ -51,11 +51,11 @@ app.get('/movies', async (req, res) => {
   try {
     const movies = await Movies.find(); // Fetch all movies from MongoDB
     if (!movies.length) {
-      console.log("No movies found"); // Log if no movies are found
       return res.status(404).send('No movies found');
     }
-    console.log("Movies found:", movies); // Log the fetched movies
-    res.status(200).json(movies);
+    // Manually setting the Content-Type header if using res.send()
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(JSON.stringify(movies));  // Send JSON data
   } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching movies');
