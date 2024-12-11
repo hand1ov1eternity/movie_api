@@ -53,14 +53,13 @@ app.get('/movies', async (req, res) => {
     if (!movies.length) {
       return res.status(404).send('No movies found');
     }
-    // Manually setting the Content-Type header if using res.send()
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(JSON.stringify(movies));  // Send JSON data
+    res.status(200).json(movies);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching movies');
   }
 });
+
   /*await Movies.find()
     .then((movies) => res.status(200).json(movies))
     .catch((err) => res.status(500).send('Error: ' + err));
