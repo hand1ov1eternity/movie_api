@@ -13,7 +13,7 @@ const { check, validationResult } = require('express-validator');
 // Run CORS
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
-app.use(cors({
+app.use(cors())/*{
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
@@ -22,7 +22,7 @@ app.use(cors({
     }
     return callback(null, true);
   }
-}));
+}));*/
 
 // Connect to MongoDB
 mongoose.connect( 'mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/movies', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -48,10 +48,21 @@ app.get('/', (req, res) => {
 
 // Return all movies
 app.get('/movies', async (req, res) => {
-  await Movies.find()
+  try {
+    const movies = await Movies.find(); // Fetch all movies from MongoDB
+    if (!movies.length) {
+      return res.status(404).send('No movies found');
+    }
+    res.status(200).json(movies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching movies');
+  }
+});
+  /*await Movies.find()
     .then((movies) => res.status(200).json(movies))
     .catch((err) => res.status(500).send('Error: ' + err));
-});
+});*/
 
 // Return data about a single movie by title
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), async (req, res) => {
