@@ -23,8 +23,9 @@ app.use(cors())/*{
     return callback(null, true);
   }
 }));*/
+
 // Connect to MongoDB
-mongoose.connect( 'mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/movie-api', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 /*mongoose.connect('mongodb://localhost:27017/cfDB', {
   useNewUrlParser: true,
