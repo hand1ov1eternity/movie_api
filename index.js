@@ -23,7 +23,6 @@ app.use(cors())/*{
     return callback(null, true);
   }
 }));*/
-
 // Connect to MongoDB
 mongoose.connect( 'mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/movies', { useNewUrlParser: true, useUnifiedTopology: true });
 
