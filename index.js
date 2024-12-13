@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 });
 
 // Return all movies
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const movies = await Movies.find(); // Fetch all movies from MongoDB
     if (!movies.length) {
