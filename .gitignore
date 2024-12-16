@@ -1,3 +1,2 @@
 node_modules/
 .env
-CONNECTION_URI=mongodb+srv://revolutionarygr:Tax1diaaxNAI@myflixdb.piv4e.mongodb.net/movie-api
