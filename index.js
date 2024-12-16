@@ -51,44 +51,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to My Movie API!');
 });
 
-// /login Endpoint
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).send('Username and password are required.');
-  }
-
-  try {
-    const user = await Users.findOne({ username: username });
-
-    if (!user) {
-      return res.status(404).send('User not found.');
-    }
-
-    // Verify the password
-    const isValidPassword = user.validatePassword(password); 
-    if (!isValidPassword) {
-      return res.status(401).send('Invalid password.');
-    }
-
-    // Generate a JWT token
-    const token = jwt.sign({ username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
-
-    return res.status(200).json({
-      user: {
-        username: user.username,
-        email: user.email,
-        favoriteMovies: user.favoriteMovies,
-      },
-      token: token,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal server error.');
-  }
-});
-
 // Return all movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
