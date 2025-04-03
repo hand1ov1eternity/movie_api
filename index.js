@@ -12,27 +12,20 @@ const Models = require('./models.js');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 
-// Run CORS
+// Initialize the app
+const app = express();
+
+/**
+ * Run CORS
+ * Allowed origins for the app
+ */
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
-app.use(cors())/*{
-  origin: (origin, callback) => {
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
-      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-      return callback(new Error(message ), false);
-    }
-    return callback(null, true);
-  }
-}));*/
+// CORS setup for the app
+app.use(cors()); // Fixed CORS issue by moving app.use(cors()) after app initialization
 
 // Connect to MongoDB
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-/*mongoose.connect('mongodb://localhost:27017/cfDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});*/
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Middleware to log all requests and parse JSON
 app.use(morgan('common'));
@@ -45,19 +38,14 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-const app = express();
 const Movies = Models.Movie;
 const Users = Models.User;
 
 // Middleware setup
-app.use(morgan('common'));
-app.use(bodyParser());
-app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-require('./auth')(app);
 
-// Connect to MongoDB
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// Require authentication logic for the app
+require('./auth')(app);
 
 /**
  * GET: Returns a welcome message.
@@ -68,7 +56,11 @@ app.get('/', (req, res) => {
   res.send('Welcome to My Movie API!');
 });
 
-// Return all movies
+/**
+ * GET: Returns all movies.
+ * @name GetMovies
+ * @route {GET} /movies
+ */
 app.get('/movies', async (req, res) => {
   try {
     const movies = await Movies.find();
