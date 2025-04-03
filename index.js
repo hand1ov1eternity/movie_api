@@ -11,6 +11,37 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
+
+// Run CORS
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors())/*{
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));*/
+
+// Connect to MongoDB
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+/*mongoose.connect('mongodb://localhost:27017/cfDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});*/
+
+// Middleware to log all requests and parse JSON
+app.use(morgan('common'));
+app.use(bodyParser());
+
+// Require Authentication Logic 
+let auth = require('./auth')(app);
+
+// Require Passport module
 const passport = require('passport');
 require('./passport');
 
@@ -37,11 +68,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to My Movie API!');
 });
 
-/**
- * GET: Returns all movies.
- * @name GetMovies
- * @route {GET} /movies
- */
+// Return all movies
 app.get('/movies', async (req, res) => {
   try {
     const movies = await Movies.find();
