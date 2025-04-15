@@ -2,13 +2,6 @@
 
 Welcome to the Movie API! This is a RESTful API that provides users with the ability to interact with movie data, including movies, genres, directors, and user-specific actions such as registration, favorites, and more.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Endpoints](#endpoints)
-- [License](#license)
-
 ## Installation
 
 To get started with the Movie API, clone this repository to your local machine and install the required dependencies.
@@ -70,7 +63,7 @@ Users Endpoints
 
 * DELETE /users/:username - Delete the user from the system
 
-For more details on the API, check out the API Documentation.
+For more details on the API, check out the API Documentation and the TypeDoc documentation in the JSDoc out/ folder.
 
 
 
