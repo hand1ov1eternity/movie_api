@@ -2,7 +2,7 @@
  * @file index.js
  * @description Main Express server setup and API endpoints for the movie application.
  */
-
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
@@ -26,6 +26,7 @@ app.use(cors()); // Fixed CORS issue by moving app.use(cors()) after app initial
 
 // Connect to MongoDB
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+console.log('Mongo URI:', process.env.CONNECTION_URI);
 
 // Middleware to log all requests and parse JSON
 app.use(morgan('common'));
