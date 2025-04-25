@@ -81,7 +81,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), async (req, 
  */
 app.get('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const user = await Users.findOne({ username: req.params.username });
+    const user = await Users.findOne({ username: req.params.username }).populate('favoriteMovies');
     if (!user) return res.status(404).send('User not found');
     res.status(200).json(user);
   } catch (err) {
