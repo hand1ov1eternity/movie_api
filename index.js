@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 // Initialize the app
 const app = express();
@@ -119,6 +120,47 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), asyn
   }
 });
 
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if username and password are provided
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
+
+  try {
+    // Find the user by username
+    const user = await Users.findOne({ username: username });
+    if (!user) {
+      return res.status(404).json({ message: 'No such user' });
+    }
+
+    // Validate password
+    const isPasswordValid = user.validatePassword(password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Incorrect password' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expires in 1 hour
+    });
+
+    // Return user data along with token
+    res.status(200).json({
+      user: {
+        username: user.username,
+        email: user.email,
+        birthday: user.birthday,
+        favoriteMovies: user.favoriteMovies,
+      },
+      token: token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error logging in user', error: error });
+  }
+});
+
 /**
  * POST: Register a new user.
  * @name RegisterUser
@@ -128,34 +170,26 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), asyn
  * @body {string} email - The email.
  * @body {Date} birthday - The birthday.
  */
-app.post('/login', [
-  check('username', 'Username is required').not().isEmpty(),
+app.post('/users', [
+  check('username', 'Username must be at least 5 characters long').isLength({ min: 5 }),
   check('password', 'Password is required').not().isEmpty(),
+  check('email', 'Invalid email').isEmail()
 ], async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
+  if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
+  let hashedPassword = Users.hashPassword(req.body.password);
   try {
-    // Check if user exists
-    const user = await Users.findOne({ username: req.body.username });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
+    let user = await Users.findOne({ username: req.body.username });
+    if (user) return res.status(400).send('User already exists');
 
-    // Check if password is correct
-    const validPassword = await user.validatePassword(req.body.password);
-    if (!validPassword) {
-      return res.status(401).send('Invalid credentials');
-    }
-
-    // If credentials are valid, respond with a success message (or send JWT)
-    res.status(200).json({ message: 'Login successful', user });
-    
-    // Optionally, if you want to use JWT:
-    // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    // res.status(200).json({ token });
+    user = await Users.create({
+      username: req.body.username,
+      password: hashedPassword,
+      email: req.body.email,
+      birthday: req.body.birthday,
+    });
+    res.status(201).json(user);
   } catch (error) {
     res.status(500).send('Error: ' + error);
   }
