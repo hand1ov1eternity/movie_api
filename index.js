@@ -195,6 +195,32 @@ app.post('/users', [
   }
 });
 
+/**
+ * PUT: Update a user's favorite movies.
+ * @name UpdateUserFavorites
+ * @route {PUT} /users/:username
+ * @authentication JWT
+ */
+app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    // Ensure the request user matches the target username
+    if (req.user.username !== req.params.username) {
+      return res.status(403).send('Permission denied');
+    }
+
+    const updatedUser = await Users.findOneAndUpdate(
+      { username: req.params.username },
+      { $set: { FavoriteMovies: req.body.FavoriteMovies } },
+      { new: true }
+    );
+
+    if (!updatedUser) return res.status(404).send('User not found');
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).send('Error updating favorites: ' + err);
+  }
+});
+
 
 /**
  * DELETE: Remove a user by username.
