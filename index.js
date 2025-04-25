@@ -128,30 +128,39 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), asyn
  * @body {string} email - The email.
  * @body {Date} birthday - The birthday.
  */
-app.post('/users', [
-  check('username', 'Username must be at least 5 characters long').isLength({ min: 5 }),
+app.post('/login', [
+  check('username', 'Username is required').not().isEmpty(),
   check('password', 'Password is required').not().isEmpty(),
-  check('email', 'Invalid email').isEmail()
 ], async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
 
-  let hashedPassword = Users.hashPassword(req.body.password);
   try {
-    let user = await Users.findOne({ username: req.body.username });
-    if (user) return res.status(400).send('User already exists');
+    // Check if user exists
+    const user = await Users.findOne({ username: req.body.username });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
 
-    user = await Users.create({
-      username: req.body.username,
-      password: hashedPassword,
-      email: req.body.email,
-      birthday: req.body.birthday,
-    });
-    res.status(201).json(user);
+    // Check if password is correct
+    const validPassword = await user.validatePassword(req.body.password);
+    if (!validPassword) {
+      return res.status(401).send('Invalid credentials');
+    }
+
+    // If credentials are valid, respond with a success message (or send JWT)
+    res.status(200).json({ message: 'Login successful', user });
+    
+    // Optionally, if you want to use JWT:
+    // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    // res.status(200).json({ token });
   } catch (error) {
     res.status(500).send('Error: ' + error);
   }
 });
+
 
 /**
  * DELETE: Remove a user by username.
