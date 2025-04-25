@@ -196,31 +196,47 @@ app.post('/users', [
 });
 
 /**
- * PUT: Update a user's favorite movies.
- * @name UpdateUserFavorites
+ * PUT: Update a user's profile and/or favorite movies.
+ * @name UpdateUser
  * @route {PUT} /users/:username
  * @authentication JWT
  */
 app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    // Ensure the request user matches the target username
     if (req.user.username !== req.params.username) {
       return res.status(403).send('Permission denied');
     }
 
+    const updatedData = {};
+
+    // Handle optional profile updates
+    if (req.body.username) updatedData.username = req.body.username;
+    if (req.body.email) updatedData.email = req.body.email;
+    if (req.body.birthday) updatedData.birthday = req.body.birthday;
+
+    if (req.body.password) {
+      const bcrypt = await import('bcrypt');
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      updatedData.password = hashedPassword;
+    }
+
+    // Handle favorites update if present
+    if (req.body.FavoriteMovies) {
+      updatedData.FavoriteMovies = req.body.FavoriteMovies;
+    }
+
     const updatedUser = await Users.findOneAndUpdate(
       { username: req.params.username },
-      { $set: { FavoriteMovies: req.body.FavoriteMovies } },
+      { $set: updatedData },
       { new: true }
     );
 
     if (!updatedUser) return res.status(404).send('User not found');
     res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(500).send('Error updating favorites: ' + err);
+    res.status(500).send('Error updating user: ' + err);
   }
 });
-
 
 /**
  * DELETE: Remove a user by username.
