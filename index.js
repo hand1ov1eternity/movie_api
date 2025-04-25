@@ -58,6 +58,38 @@ app.get('/', (req, res) => {
 });
 
 /**
+ * GET: Returns a list of all users.
+ * @name GetUsers
+ * @route {GET} /users
+ * @authentication JWT
+ */
+app.get('/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const users = await Users.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).send('Error fetching users: ' + err);
+  }
+});
+
+/**
+ * GET: Returns data on a single user by username.
+ * @name GetUser
+ * @route {GET} /users/:username
+ * @authentication JWT
+ */
+app.get('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const user = await Users.findOne({ username: req.params.username });
+    if (!user) return res.status(404).send('User not found');
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).send('Error: ' + err);
+  }
+});
+
+
+/**
  * GET: Returns all movies.
  * @name GetMovies
  * @route {GET} /movies
