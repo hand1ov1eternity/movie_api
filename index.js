@@ -25,7 +25,7 @@ let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 app.use(cors()); // Fixed CORS issue by moving app.use(cors()) after app initialization
 
 // Connect to MongoDB
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, {});
 console.log('Mongo URI:', process.env.CONNECTION_URI);
 
 // Middleware to log all requests and parse JSON
@@ -169,8 +169,10 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
   }
 });
 
-// Start the server
-const port = 3000;
+//Start Server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
+
+
