@@ -196,6 +196,31 @@ app.post('/users', [
 });
 
 /**
+ * POST: Add a movie to a user's list of favorite movies.
+ * @name AddFavoriteMovie
+ * @route {POST} /users/:username/movies/:movieId
+ * @authentication JWT
+ */
+app.post('/users/:username/movies/:movieId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const updatedUser = await Users.findOneAndUpdate(
+      { username: req.params.username },
+      { $addToSet: { favoriteMovies: req.params.movieId } }, // $addToSet prevents duplicates
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).send('Error adding favorite movie: ' + error);
+  }
+});
+
+
+/**
  * PUT: Update a user's profile and/or favorite movies.
  * @name UpdateUser
  * @route {PUT} /users/:username
