@@ -279,6 +279,35 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
   }
 });
 
+/**
+ * DELETE: Removes a movie from a user's list of favorite movies.
+ * @name RemoveFavoriteMovie
+ * @route {DELETE} /users/:username/movies/:movieId
+ * @authentication JWT
+ */
+app.delete('/users/:username/movies/:movieId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    if (req.user.username !== req.params.username) {
+      return res.status(403).send('Permission denied');
+    }
+
+    const updatedUser = await Users.findOneAndUpdate(
+      { username: req.params.username },
+      { $pull: { favoriteMovies: req.params.movieId } }, // Remove the movie ID from the array
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).send('Error removing favorite movie: ' + err);
+  }
+});
+
+
 //Start Server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
