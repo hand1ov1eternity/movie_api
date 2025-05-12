@@ -25,7 +25,7 @@ Usage
 After installing the dependencies, you can run the API server by using the following command:
 
 ```bash
-npm start
+node index.js
 ```
 
 The server will start and you can make requests to the API using Postman or any HTTP client. The default API URL is:
