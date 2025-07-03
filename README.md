@@ -1,3 +1,7 @@
+# 🎬 Movie API
+
+---
+
 ## 🚀 Features
 
 - 📚 **Browse Movies**
