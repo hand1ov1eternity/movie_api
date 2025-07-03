@@ -42,6 +42,9 @@ cd movie_api
 
 ## Step 3: Install dependencies
 npm install
+
+---
+
 ⚙️ Usage
 Run the API server locally:
 
