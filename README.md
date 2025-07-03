@@ -57,7 +57,7 @@ http://localhost:3000
 Use Postman, cURL, or any HTTP client to interact with the endpoints.
 
 ## 📚 Endpoints Overview
-# 🎞️ Movies
+#### 🎞️ Movies
 GET /movies
 Retrieve a list of all movies.
 
