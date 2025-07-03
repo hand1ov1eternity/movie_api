@@ -33,7 +33,8 @@ Render
 Clone the repository and install dependencies:
 
 # Step 1: Clone the repository
-```bash git clone https://github.com/hand1ov1eternity/movie_api.git ```bash
+```bash
+git clone https://github.com/hand1ov1eternity/movie_api.git 
 
 # Step 2: Navigate into the project directory
 cd movie_api
@@ -87,6 +88,8 @@ For detailed API specs, see:
 API Documentation
 
 TypeDoc output located in the out/ folder.
+
+```
 
 ✨ Deployment
 This API is deployed using Render for easy cloud hosting and scaling.
