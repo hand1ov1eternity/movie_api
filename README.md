@@ -32,16 +32,15 @@ Render
 
 Clone the repository and install dependencies:
 
-```bash
 
-# Step 1: Clone the repository
+## Step 1: Clone the repository
 
 git clone https://github.com/hand1ov1eternity/movie_api.git 
 
-# Step 2: Navigate into the project directory
+## Step 2: Navigate into the project directory
 cd movie_api
 
-# Step 3: Install dependencies
+## Step 3: Install dependencies
 npm install
 ⚙️ Usage
 Run the API server locally:
@@ -91,7 +90,7 @@ API Documentation
 
 TypeDoc output located in the out/ folder.
 
-```
+
 
 ✨ Deployment
 This API is deployed using Render for easy cloud hosting and scaling.
