@@ -58,37 +58,37 @@ Use Postman, cURL, or any HTTP client to interact with the endpoints.
 
 ## 📚 Endpoints Overview
 #### 🎞️ Movies
-GET /movies
+• GET /movies
 Retrieve a list of all movies.
 
-GET /movies/:title
+• GET /movies/:title
 Get details about a movie by title.
 
-🏷️ Genres
-GET /genres/:name
+#### 🏷️ Genres
+• GET /genres/:name
 Retrieve information about a genre.
 
-🎬 Directors
-GET /directors/:name
+#### 🎬 Directors
+• GET /directors/:name
 Get information about a director.
 
-👥 Users
-POST /users
+#### 👥 Users
+• POST /users
 Register a new user.
 
-PUT /users/:username
+• PUT /users/:username
 Update user details.
 
-POST /users/:username/movies/:movieID
+• POST /users/:username/movies/:movieID
 Add a movie to user's favorites.
 
-DELETE /users/:username/movies/:movieID
+• DELETE /users/:username/movies/:movieID
 Remove a movie from user's favorites.
 
-DELETE /users/:username
+• DELETE /users/:username
 Delete a user account.
 
-📖 Documentation
+#### 📖 Documentation
 For detailed API specs, see:
 
 API Documentation
