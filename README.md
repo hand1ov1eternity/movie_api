@@ -22,9 +22,6 @@ PostgreSQL
 JSON
 Render
 
-yaml
-Kopieren
-
 ---
 
 ## 📦 Installation
