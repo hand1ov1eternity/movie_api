@@ -40,13 +40,9 @@ npm install
 ⚙️ Usage
 Run the API server locally:
 
-bash
-Kopieren
 node index.js
 The API will be available at:
 
-arduino
-Kopieren
 http://localhost:3000
 Use Postman, cURL, or any HTTP client to interact with the endpoints.
 
@@ -92,13 +88,5 @@ TypeDoc output located in the out/ folder.
 ✨ Deployment
 This API is deployed using Render for easy cloud hosting and scaling.
 
-🤝 Connect With Me
-Find more of my work:
 
-GitHub
-
-LinkedIn
-
-Twitter
-
-Built with Express, MongoDB, and a love of movies 🍿
+> Built with Express, MongoDB, and a love of movies 🍿 — always a work in progress 🚧.
