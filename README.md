@@ -88,5 +88,6 @@ TypeDoc output located in the out/ folder.
 ✨ Deployment
 This API is deployed using Render for easy cloud hosting and scaling.
 
+---
 
 > Built with Express, MongoDB, and a love of movies 🍿 — always a work in progress 🚧.
