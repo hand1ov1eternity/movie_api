@@ -17,13 +17,13 @@
 
 ## 🛠️ Technologies Used
 
-JavaScript
-Node.js
-Express.js
-MongoDB
-Mongoose
-PostgreSQL
-JSON
+JavaScript,
+Node.js,
+Express.js,
+MongoDB,
+Mongoose,
+PostgreSQL,
+JSON,
 Render
 
 ---
@@ -32,8 +32,10 @@ Render
 
 Clone the repository and install dependencies:
 
-# Step 1: Clone the repository
 ```bash
+
+# Step 1: Clone the repository
+
 git clone https://github.com/hand1ov1eternity/movie_api.git 
 
 # Step 2: Navigate into the project directory
