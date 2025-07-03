@@ -45,7 +45,7 @@ npm install
 
 ---
 
-##⚙️ Usage
+## ⚙️ Usage
 Run the API server locally:
 
 node index.js
@@ -56,8 +56,8 @@ http://localhost:3000
 
 Use Postman, cURL, or any HTTP client to interact with the endpoints.
 
-##📚 Endpoints Overview
-#🎞️ Movies
+## 📚 Endpoints Overview
+# 🎞️ Movies
 GET /movies
 Retrieve a list of all movies.
 
