@@ -32,9 +32,8 @@ Render
 
 Clone the repository and install dependencies:
 
-```bash
 # Step 1: Clone the repository
-git clone https://github.com/hand1ov1eternity/movie_api.git
+```bash git clone https://github.com/hand1ov1eternity/movie_api.git ```bash
 
 # Step 2: Navigate into the project directory
 cd movie_api
