@@ -23,28 +23,27 @@ passport.use(
       passwordField: 'password',
     },
     async (username, password, callback) => {
-      console.log(`${username} ${password}`);
-      await Users.findOne({ username: username })
-        .then((user) => {
-          if (!user) {
-            console.log('incorrect username');
-            return callback(null, false, {
-              message: 'Incorrect username or password.',
-            });
-          }
-          if (!user.validatePassword(password)) {
-            console.log('incorrect password');
-            return callback(null, false, { message: 'Incorrect password.' });
-          }
-          console.log('finished');
-          return callback(null, user);
-        })
-        .catch((error) => {
-          if (error) {
-            console.log(error);
-            return callback(error);
-          }
-        });
+      // Safe logging (no password)
+      console.log(`Auth attempt for username: ${username}`);
+
+      try {
+        const user = await Users.findOne({ username: username });
+        if (!user) {
+          console.log(`Auth failed: no such user (${username})`);
+          return callback(null, false, { message: 'Incorrect username or password.' });
+        }
+
+        if (!user.validatePassword(password)) {
+          console.log(`Auth failed: bad password for (${username})`);
+          return callback(null, false, { message: 'Incorrect username or password.' });
+        }
+
+        console.log(`Auth success for ${username}`);
+        return callback(null, user);
+      } catch (error) {
+        console.error('LocalStrategy error:', error);
+        return callback(error);
+      }
     }
   )
 );
@@ -57,16 +56,16 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'your_jwt_secret',
+      secretOrKey: process.env.JWT_SECRET, // <= use env, not hardcoded
     },
     async (jwtPayload, callback) => {
-      return await Users.findById(jwtPayload._id)
-        .then((user) => {
-          return callback(null, user);
-        })
-        .catch((error) => {
-          return callback(error);
-        });
+      try {
+        // match what we sign below (_id)
+        const user = await Users.findById(jwtPayload._id);
+        return callback(null, user || false);
+      } catch (error) {
+        return callback(error);
+      }
     }
   )
 );
